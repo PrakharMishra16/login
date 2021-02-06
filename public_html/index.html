@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css" />
+
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <link rel="stylesheet" href="style.css"/>
+        
+        
+        <script>
+            function validateAndGetFormData() {
+                console.log('asd')
+                var empIdVar = $("#fname").val();
+                
+                if (empIdVar === "") {
+                    alert("Employee first name Required Value");
+                    $("#fname").focus();
+                    return "";
+                }
+                var empNameVar = $("#lname").val();
+                if (empNameVar === "") {
+                    alert("Employee  last Name is Required Value");
+                    $("#lname").focus();
+                    return "";
+                }
+                var empEmailVar = $("#email").val();
+                if (empEmailVar === "") {
+                    alert("Employee Email is Required Value");
+                    $("#email").focus();
+                    return "";
+                }
+                var empPassVar = $("#pss").val();
+                if (empPassVar === "") {
+                    alert("Employee password is Required Value");
+                    $("#pss").focus();
+                    return "";
+                }
+                var jsonStrObj = {
+                    'first name': empIdVar,
+                    'last name ': empNameVar,
+                    email: empEmailVar,
+                    password: empPassVar
+
+                };
+                return JSON.stringify(jsonStrObj);
+            }
+// This method is used to create PUT Json request.
+            function createPUTRequest(connToken, jsonObj, dbName, relName) {
+                var putRequest = "{\n"
+                        + "\"token\" : \""
+                        + connToken
+                        + "\","
+                        + "\"dbName\": \""
+                        + dbName
+                        + "\",\n" + "\"cmd\" : \"PUT\",\n"
+                        + "\"rel\" : \""
+                        + relName + "\","
+                        + "\"jsonStr\": \n"
+                        + jsonObj
+                        + "\n"
+                        + "}";
+                return putRequest;
+            }
+
+            function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+                var url = dbBaseUrl + apiEndPointUrl;
+                var jsonObj;
+                $.post(url, reqString, function (result) {
+                    jsonObj = JSON.parse(result);
+                }).fail(function (result) {
+                    var dataJsonObj = result.responseText;
+                    jsonObj = JSON.parse(dataJsonObj);
+                });
+                return jsonObj;
+            }
+
+            function saveEmployee() {
+            console.log('asd');       
+
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "") {
+                    return;
+                }
+                console.log(jsonStr);
+//                var putReqStr = createPUTRequest("90935527|-31948800423977380|90931462",
+//                        jsonStr, "Signup", "REL");
+//
+//                alert(putReqStr);
+//
+//                jQuery.ajaxSetup({async: false});
+//                var resultObj = executeCommand(putReqStr,
+//                        "http://api.login2explore.com:5577", "/api/iml");
+//                alert(JSON.stringify(resultObj));
+//                jQuery.ajaxSetup({async: true});
+//                resetForm();
+            }
+        
+
+            </script>
+    </head>
+    <body>
+
+        <div class="form">
+
+            <ul class="tab-group">
+                <li class="tab active"><a href="#signup">Sign Up</a></li>
+                <li class="tab"><a href="#login">Log In</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="signup">   
+                    <h1>Sign Up for Free</h1>
+
+                    <form  method="post">
+
+                        <div class="top-row">
+                            <div class="field-wrap">
+                                <label>
+                                    First Name<span class="req">*</span>
+                                </label>
+                                <input type="text" required autocomplete="off" id='fname'/>
+                            </div>
+
+                            <div class="field-wrap">
+                                <label>
+                                    Last Name<span class="req">*</span>
+                                </label>
+                                <input type="text" required autocomplete="off" id='lname' />
+                            </div>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Email Address<span class="req">*</span>
+                            </label>
+                            <input type="email" required autocomplete="off" id ='email'/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Set A Password<span class="req">*</span>
+                            </label>
+                            <input type="password" required autocomplete="off" id='pss' />
+                        </div>
+
+                        <button type="submit" class="button button-block" onclick="saveEmployee()">Get Started</button>
+
+                    </form>
+
+                </div>
+
+                <div id="login">   
+                    <h1>Welcome Back!</h1>
+
+                    <form action="/" method="post">
+
+                        <div class="field-wrap">
+                            <label>
+                                Email Address<span class="req">*</span>
+                            </label>
+                            <input type="email" required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Password<span class="req">*</span>
+                            </label>
+                            <input type="password" required autocomplete="off" id='password' />
+                        </div>
+
+                        <p class="forgot"><a href="#">Forgot Password?</a></p>
+
+                        <button class="button button-block" onclick="login();">Log In</button>
+
+                    </form>
+
+                </div>
+
+            </div><!-- tab-content -->
+
+        </div> <!-- /form -->
+        <script src="script.js" ></script>
+
+</body>
+</html>
